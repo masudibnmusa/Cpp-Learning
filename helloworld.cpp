@@ -5,9 +5,9 @@ int main(){
     int a ;
     int b ;
     int c ;
-    cout << "Enter the number:";
+    cout << "Enter the 1st number:";
     cin >> a;
-    cout << "enter the 2nd number:";
+    cout << "Enter the 2nd number:";
     cin >> b;
     cout << "Enter the 3rd number:";
     cin >> c;
