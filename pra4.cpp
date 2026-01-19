@@ -1,13 +1,16 @@
 #include<iostream>
 using namespace std;
 int main(){
-    int age = 25;
-    cout << sizeof(age);
     char grade = 'a';
-    cout << grade <<endl;
-    float PI = 3.1416f;
-    cout << PI<<endl;
-    double price = 100.99;
-    cout << price <<endl;
+    int value = grade;
+    cout << value <<endl;
+
+    double price = 99;
+    int newPrice = (int)price;
+    cout << newPrice << endl;
+
+    double marks = 89.456;
+    int newMarks = (int)marks;
+    cout << newMarks << endl;
     return 0;
 }
