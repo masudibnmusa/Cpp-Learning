@@ -1,15 +1,23 @@
 #include<iostream>
 using namespace std;
 int main(){
-    cout << "Hello world !";
+    cout << "Hello world !"<< endl;
     int a ;
     int b ;
-    
+    int c ;
     cout << "Enter the number:";
     cin >> a;
     cout << "enter the 2nd number:";
-    cin>> b;
-    int sum = a+b;
-    cout << "the sum of the two number is : "<< sum;
+    cin >> b;
+    cout << "Enter the 3rd number:";
+    cin >> c;
+    if(a>b && a>c){
+        cout << a << " is greater";
+    }else if (b>a && b>c){
+        cout << b << " is greater";
+    }else{
+        cout << c << " is greater";
+    }
+
     return 0 ;
 }
