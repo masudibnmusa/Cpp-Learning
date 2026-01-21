@@ -1,6 +1,10 @@
 #include<iostream>
 using namespace std;
 void calculatePrime(int n){
+    if(n<=0){
+        cout << "is not a prime number";
+        return ;
+    }
     bool flag = true;
     for(int i=2;i<n;i++){
         if(n%i==0){
