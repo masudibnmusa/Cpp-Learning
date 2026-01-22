@@ -3,8 +3,16 @@ using namespace std;
 int main(){
     int arr[] = {4,2,7,8,1,2,5};
     int n = sizeof(arr)/sizeof(arr[0]);
-    for(int i=n-1;i>=0;i++){
-        cout << arr[i];
+    int start = 0;
+    int end = n-1;
+
+    while(start<end){
+        swap(arr[start],arr[end]);
+        start++;
+        end--;
+    }
+    for(int i=0;i<n;i++){
+        cout << arr[i] << ",";
     }
     return 0;
 }
