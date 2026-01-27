@@ -12,10 +12,14 @@ int main(){
         cout << val << " ";
     }
     cout << "\n";
+
     vec.pop_back();
 
     for(int val : vec){
         cout << val << " ";
     }
+    cout << "\n";
+    cout << vec.front() << "\n";
+    cout << vec.back() << "\n";
     return 0;
 }
