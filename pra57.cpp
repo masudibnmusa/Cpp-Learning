@@ -19,9 +19,7 @@ int main(){
             }
         }
         if(minIndex != i){
-            int temp = arr[i];
-            arr[i] = arr[minIndex];
-            arr[minIndex] = temp;
+            swap(arr[minIndex],arr[i]);
         }
         for (int i = 0;i<n-1;i++){
             cout << arr[i] << " ";
