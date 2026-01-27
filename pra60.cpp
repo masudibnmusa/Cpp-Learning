@@ -7,6 +7,13 @@ int main(){
     vec.push_back(26);
     vec.push_back(27);
     vec.push_back(28);
+    
+    for(int val : vec){
+        cout << val << " ";
+    }
+    cout << "\n";
+    vec.pop_back();
+
     for(int val : vec){
         cout << val << " ";
     }
