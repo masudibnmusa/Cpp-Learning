@@ -21,5 +21,6 @@ int main(){
     cout << "\n";
     cout << vec.front() << "\n";
     cout << vec.back() << "\n";
+    cout << vec.at(0) << "\n";
     return 0;
 }
