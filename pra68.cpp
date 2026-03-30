@@ -5,5 +5,6 @@ void marge(int arr[],int left,int right, int mid){
     int n2 = right - mid ;
 }
 int main(){
+    cout << "Masud Ibn Musa";
     return 0;
 }
