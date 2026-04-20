@@ -1,34 +1,42 @@
 #include <iostream>
+#include <algorithm>
+#include <iomanip>
 using namespace std;
 
-int partition(int arr[], int low, int high) {
-    int pivot = arr[high];
-    int i = low - 1;
+struct Item {
+    int weight;
+    int value;
+};
 
-    for (int j = low; j < high; j++) {
-        if (arr[j] < pivot) {
-            i++;
-            swap(arr[i], arr[j]);
-        }
-    }
-
-    swap(arr[i + 1], arr[high]);
-    return i + 1;
+bool cmp(Item a, Item b) {
+    double r1 = (double)a.value / a.weight;
+    double r2 = (double)b.value / b.weight;
+    return r1 > r2;
 }
 
-void quick_sort(int arr[], int low, int high) {
-    if (low < high) {
-        int pi = partition(arr, low, high);
-        quick_sort(arr, low, pi - 1);
-        quick_sort(arr, pi + 1, high);
+double fractional_knapsack(Item items[], int n, int capacity) {
+    sort(items, items + n, cmp);
+
+    double total = 0.0;
+
+    for (int i = 0; i < n; i++) {
+        if (capacity >= items[i].weight) {
+            total += items[i].value;
+            capacity -= items[i].weight;
+        } else {
+            total += ((double)items[i].value / items[i].weight) * capacity;
+            break;
+        }
     }
+    return total;
 }
 
 int main() {
-    int arr[] = {10, 7, 8, 9, 1, 5};
+    Item items[] = {{10,60}, {20,100}, {30,120}};
+    int n = 3, capacity = 50;
 
-    quick_sort(arr, 0, 5);
+    cout << fixed << setprecision(2);
+    cout << "Max Value: " << fractional_knapsack(items, n, capacity);
 
-    for (int i = 0; i < 6; i++) cout << arr[i] << " ";
     return 0;
 }
