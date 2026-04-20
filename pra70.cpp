@@ -1,20 +1,44 @@
 #include <iostream>
 using namespace std;
 
-int binary_search(int arr[], int left, int right, int target) {
-    if (left > right) return -1;
+void merge(int arr[], int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
 
-    int mid = (left + right) / 2;
+    int *L = new int[n1];
+    int *R = new int[n2];
 
-    if (arr[mid] == target) return mid;
-    else if (target < arr[mid])
-        return binary_search(arr, left, mid - 1, target);
-    else
-        return binary_search(arr, mid + 1, right, target);
+    for (int i = 0; i < n1; i++) L[i] = arr[left + i];
+    for (int j = 0; j < n2; j++) R[j] = arr[mid + 1 + j];
+
+    int i = 0, j = 0, k = left;
+
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) arr[k++] = L[i++];
+        else arr[k++] = R[j++];
+    }
+
+    while (i < n1) arr[k++] = L[i++];
+    while (j < n2) arr[k++] = R[j++];
+
+    delete[] L;
+    delete[] R;
+}
+
+void merge_sort(int arr[], int left, int right) {
+    if (left < right) {
+        int mid = (left + right) / 2;
+        merge_sort(arr, left, mid);
+        merge_sort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
 }
 
 int main() {
-    int arr[] = {1,3,5,7,9};
-    cout << binary_search(arr, 0, 4, 7) << endl;
+    int arr[] = {38, 27, 43, 3, 9, 82, 10};
+
+    merge_sort(arr, 0, 6);
+
+    for (int i = 0; i < 7; i++) cout << arr[i] << " ";
     return 0;
 }
