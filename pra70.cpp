@@ -1,27 +1,30 @@
 #include <iostream>
+#include <climits>
 using namespace std;
 
-int knapsack_01(int weights[], int values[], int n, int W) {
-    int dp[n+1][W+1];
+int min_coins(int coins[], int n, int amount) {
+    int dp[amount + 1];
 
-    for (int i = 0; i <= n; i++) {
-        for (int w = 0; w <= W; w++) {
-            if (i == 0 || w == 0)
-                dp[i][w] = 0;
-            else if (weights[i-1] <= w)
-                dp[i][w] = max(dp[i-1][w],
-                               dp[i-1][w - weights[i-1]] + values[i-1]);
-            else
-                dp[i][w] = dp[i-1][w];
+    for (int i = 0; i <= amount; i++)
+        dp[i] = INT_MAX;
+
+    dp[0] = 0;
+
+    for (int i = 1; i <= amount; i++) {
+        for (int j = 0; j < n; j++) {
+            if (coins[j] <= i && dp[i - coins[j]] != INT_MAX) {
+                dp[i] = min(dp[i], 1 + dp[i - coins[j]]);
+            }
         }
     }
-    return dp[n][W];
+
+    return (dp[amount] == INT_MAX) ? -1 : dp[amount];
 }
 
 int main() {
-    int weights[] = {2, 3, 4, 5};
-    int values[] = {3, 4, 5, 6};
+    int coins[] = {1, 5, 6, 9};
+    int amount = 11;
 
-    cout << knapsack_01(weights, values, 4, 5);
+    cout << min_coins(coins, 4, amount);
     return 0;
 }
