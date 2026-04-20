@@ -1,24 +1,28 @@
 #include <iostream>
+#include <cstring>
 using namespace std;
 
-int count_ways(int coins[], int n, int amount) {
-    int dp[amount + 1] = {0};
+int lcs(char *s1, char *s2, int m, int n) {
+    int dp[m+1][n+1];
 
-    dp[0] = 1;
-
-    for (int i = 0; i < n; i++) {
-        for (int a = coins[i]; a <= amount; a++) {
-            dp[a] += dp[a - coins[i]];
+    for (int i = 0; i <= m; i++) {
+        for (int j = 0; j <= n; j++) {
+            if (i == 0 || j == 0)
+                dp[i][j] = 0;
+            else if (s1[i-1] == s2[j-1])
+                dp[i][j] = 1 + dp[i-1][j-1];
+            else
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
         }
     }
 
-    return dp[amount];
+    return dp[m][n];
 }
 
 int main() {
-    int coins[] = {1, 2, 3};
-    int amount = 4;
+    char s1[] = "ABCBDAB";
+    char s2[] = "BDCAB";
 
-    cout << count_ways(coins, 3, amount);
+    cout << lcs(s1, s2, strlen(s1), strlen(s2));
     return 0;
 }
