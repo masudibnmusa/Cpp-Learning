@@ -1,12 +1,12 @@
 #include <iostream>
 using namespace std;
 
-int count_digits(int n) {
-    if (n == 0) return 1;
-    return 1 + count_digits(n / 10);
+double power(double base, int exp) {
+    if (exp == 0) return 1;
+    return base * power(base, exp - 1);
 }
 
 int main() {
-    cout << count_digits(98765) << endl;
+    cout << power(2, 4) << endl;
     return 0;
 }
