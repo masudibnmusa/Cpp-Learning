@@ -1,62 +1,62 @@
 #include <iostream>
-#include <climits>
+#include <algorithm>
 using namespace std;
 
-#define V 5
+struct Edge {
+    int u, v, w;
+};
 
-int minKey(int key[], bool mstSet[]) {
-    int min = INT_MAX, min_index;
-
-    for (int v = 0; v < V; v++)
-        if (!mstSet[v] && key[v] < min)
-            min = key[v], min_index = v;
-
-    return min_index;
+bool cmp(Edge a, Edge b) {
+    return a.w < b.w;
 }
 
-void prims_mst(int graph[V][V]) {
-    int parent[V];
-    int key[V];
-    bool mstSet[V];
+int parent[100], rnk[100];
+
+int find(int x) {
+    if (parent[x] != x)
+        parent[x] = find(parent[x]);
+    return parent[x];
+}
+
+void unite(int a, int b) {
+    a = find(a);
+    b = find(b);
+
+    if (a != b) {
+        if (rnk[a] < rnk[b]) swap(a, b);
+        parent[b] = a;
+        if (rnk[a] == rnk[b]) rnk[a]++;
+    }
+}
+
+void kruskals_mst(Edge edges[], int E, int V) {
+    sort(edges, edges + E, cmp);
 
     for (int i = 0; i < V; i++) {
-        key[i] = INT_MAX;
-        mstSet[i] = false;
-    }
-
-    key[0] = 0;
-    parent[0] = -1;
-
-    for (int count = 0; count < V - 1; count++) {
-        int u = minKey(key, mstSet);
-        mstSet[u] = true;
-
-        for (int v = 0; v < V; v++) {
-            if (graph[u][v] && !mstSet[v] && graph[u][v] < key[v]) {
-                parent[v] = u;
-                key[v] = graph[u][v];
-            }
-        }
+        parent[i] = i;
+        rnk[i] = 0;
     }
 
     int total = 0;
     cout << "Edge Weight\n";
-    for (int i = 1; i < V; i++) {
-        cout << parent[i] << " - " << i << " " << graph[i][parent[i]] << endl;
-        total += graph[i][parent[i]];
+
+    for (int i = 0; i < E; i++) {
+        if (find(edges[i].u) != find(edges[i].v)) {
+            unite(edges[i].u, edges[i].v);
+            cout << edges[i].u << " - " << edges[i].v << " " << edges[i].w << endl;
+            total += edges[i].w;
+        }
     }
+
     cout << "Total weight: " << total;
 }
 
 int main() {
-    int graph[V][V] = {
-        {0,2,0,6,0},
-        {2,0,3,8,5},
-        {0,3,0,0,7},
-        {6,8,0,0,9},
-        {0,5,7,9,0}
+    Edge edges[] = {
+        {0,1,2},{0,3,6},{1,2,3},{1,3,8},
+        {1,4,5},{2,4,7},{3,4,9}
     };
 
-    prims_mst(graph);
+    kruskals_mst(edges, 7, 5);
     return 0;
 }
