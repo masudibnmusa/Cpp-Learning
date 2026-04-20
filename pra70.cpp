@@ -1,45 +1,27 @@
 #include <iostream>
-#include <climits>
 using namespace std;
 
-struct Edge {
-    int u, v, w;
-};
+int knapsack_01(int weights[], int values[], int n, int W) {
+    int dp[n+1][W+1];
 
-void bellman_ford(int V, int E, Edge edges[], int src) {
-    int dist[V];
-
-    for (int i = 0; i < V; i++) dist[i] = INT_MAX / 2;
-    dist[src] = 0;
-
-    for (int i = 1; i < V; i++) {
-        for (int j = 0; j < E; j++) {
-            if (dist[edges[j].u] + edges[j].w < dist[edges[j].v]) {
-                dist[edges[j].v] = dist[edges[j].u] + edges[j].w;
-            }
+    for (int i = 0; i <= n; i++) {
+        for (int w = 0; w <= W; w++) {
+            if (i == 0 || w == 0)
+                dp[i][w] = 0;
+            else if (weights[i-1] <= w)
+                dp[i][w] = max(dp[i-1][w],
+                               dp[i-1][w - weights[i-1]] + values[i-1]);
+            else
+                dp[i][w] = dp[i-1][w];
         }
     }
-
-    // check negative cycle
-    for (int j = 0; j < E; j++) {
-        if (dist[edges[j].u] + edges[j].w < dist[edges[j].v]) {
-            cout << "Graph contains negative-weight cycle";
-            return;
-        }
-    }
-
-    cout << "Vertex Distance\n";
-    for (int i = 0; i < V; i++)
-        cout << i << " " << dist[i] << endl;
+    return dp[n][W];
 }
 
 int main() {
-    Edge edges[] = {
-        {0,1,6},{0,2,7},{1,2,8},{1,3,5},
-        {1,4,-4},{2,3,-3},{2,4,9},{3,1,-2},
-        {4,0,2},{4,3,7}
-    };
+    int weights[] = {2, 3, 4, 5};
+    int values[] = {3, 4, 5, 6};
 
-    bellman_ford(5, 10, edges, 0);
+    cout << knapsack_01(weights, values, 4, 5);
     return 0;
 }
