@@ -1,23 +1,21 @@
 #include <iostream>
 using namespace std;
 
-int find_median(int arr[], int size) {
-    int mid = size / 2;
-
-    for (int i = 0; i <= mid; i++) {
-        int min_idx = i;
-        for (int j = i + 1; j < size; j++) {
-            if (arr[j] < arr[min_idx]) min_idx = j;
+int find_kth_largest(int arr[], int size, int k) {
+    for (int i = 0; i < k; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                swap(arr[j], arr[j + 1]);
+            }
         }
-        swap(arr[i], arr[min_idx]);
     }
-    return arr[mid];
+    return arr[size - k];
 }
 
 int main() {
-    int arr[] = {7, 2, 10, 9, 1};
-    int size = 5;
+    int arr[] = {3, 1, 7, 4, 9, 2};
+    int size = 6, k = 2;
 
-    cout << "Median: " << find_median(arr, size) << endl;
+    cout << "K-th Largest: " << find_kth_largest(arr, size, k) << endl;
     return 0;
 }
