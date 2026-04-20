@@ -1,12 +1,13 @@
 #include <iostream>
 using namespace std;
 
-double power(double base, int exp) {
-    if (exp == 0) return 1;
-    return base * power(base, exp - 1);
+int array_sum(int arr[], int size) {
+    if (size == 1) return arr[0];
+    return arr[size - 1] + array_sum(arr, size - 1);
 }
 
 int main() {
-    cout << power(2, 4) << endl;
+    int arr[] = {1,2,3,4,5};
+    cout << array_sum(arr, 5) << endl;
     return 0;
 }
