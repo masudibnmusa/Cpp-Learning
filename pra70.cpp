@@ -2,38 +2,29 @@
 #include <climits>
 using namespace std;
 
-#define V 5
+struct Edge {
+    int u, v, w;
+};
 
-int minDist(int dist[], bool visited[]) {
-    int min = INT_MAX, idx;
-
-    for (int i = 0; i < V; i++)
-        if (!visited[i] && dist[i] < min)
-            min = dist[i], idx = i;
-
-    return idx;
-}
-
-void dijkstra(int graph[V][V], int src) {
+void bellman_ford(int V, int E, Edge edges[], int src) {
     int dist[V];
-    bool visited[V];
 
-    for (int i = 0; i < V; i++) {
-        dist[i] = INT_MAX;
-        visited[i] = false;
-    }
-
+    for (int i = 0; i < V; i++) dist[i] = INT_MAX / 2;
     dist[src] = 0;
 
-    for (int count = 0; count < V - 1; count++) {
-        int u = minDist(dist, visited);
-        visited[u] = true;
-
-        for (int v = 0; v < V; v++) {
-            if (!visited[v] && graph[u][v] &&
-                dist[u] + graph[u][v] < dist[v]) {
-                dist[v] = dist[u] + graph[u][v];
+    for (int i = 1; i < V; i++) {
+        for (int j = 0; j < E; j++) {
+            if (dist[edges[j].u] + edges[j].w < dist[edges[j].v]) {
+                dist[edges[j].v] = dist[edges[j].u] + edges[j].w;
             }
+        }
+    }
+
+    // check negative cycle
+    for (int j = 0; j < E; j++) {
+        if (dist[edges[j].u] + edges[j].w < dist[edges[j].v]) {
+            cout << "Graph contains negative-weight cycle";
+            return;
         }
     }
 
@@ -43,14 +34,12 @@ void dijkstra(int graph[V][V], int src) {
 }
 
 int main() {
-    int graph[V][V] = {
-        {0,4,0,0,8},
-        {4,0,8,0,11},
-        {0,8,0,7,0},
-        {0,0,7,0,9},
-        {8,11,0,9,0}
+    Edge edges[] = {
+        {0,1,6},{0,2,7},{1,2,8},{1,3,5},
+        {1,4,-4},{2,3,-3},{2,4,9},{3,1,-2},
+        {4,0,2},{4,3,7}
     };
 
-    dijkstra(graph, 0);
+    bellman_ford(5, 10, edges, 0);
     return 0;
 }
