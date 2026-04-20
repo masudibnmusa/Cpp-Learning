@@ -1,13 +1,20 @@
 #include <iostream>
 using namespace std;
 
-int array_max(int arr[], int size) {
-    if (size == 1) return arr[0];
-    return max(arr[size - 1], array_max(arr, size - 1));
+int binary_search(int arr[], int left, int right, int target) {
+    if (left > right) return -1;
+
+    int mid = (left + right) / 2;
+
+    if (arr[mid] == target) return mid;
+    else if (target < arr[mid])
+        return binary_search(arr, left, mid - 1, target);
+    else
+        return binary_search(arr, mid + 1, right, target);
 }
 
 int main() {
-    int arr[] = {3, 1, 9, 2, 7};
-    cout << array_max(arr, 5) << endl;
+    int arr[] = {1,3,5,7,9};
+    cout << binary_search(arr, 0, 4, 7) << endl;
     return 0;
 }
