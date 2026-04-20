@@ -1,42 +1,62 @@
 #include <iostream>
-#include <algorithm>
-#include <iomanip>
+#include <climits>
 using namespace std;
 
-struct Item {
-    int weight;
-    int value;
-};
+#define V 5
 
-bool cmp(Item a, Item b) {
-    double r1 = (double)a.value / a.weight;
-    double r2 = (double)b.value / b.weight;
-    return r1 > r2;
+int minKey(int key[], bool mstSet[]) {
+    int min = INT_MAX, min_index;
+
+    for (int v = 0; v < V; v++)
+        if (!mstSet[v] && key[v] < min)
+            min = key[v], min_index = v;
+
+    return min_index;
 }
 
-double fractional_knapsack(Item items[], int n, int capacity) {
-    sort(items, items + n, cmp);
+void prims_mst(int graph[V][V]) {
+    int parent[V];
+    int key[V];
+    bool mstSet[V];
 
-    double total = 0.0;
+    for (int i = 0; i < V; i++) {
+        key[i] = INT_MAX;
+        mstSet[i] = false;
+    }
 
-    for (int i = 0; i < n; i++) {
-        if (capacity >= items[i].weight) {
-            total += items[i].value;
-            capacity -= items[i].weight;
-        } else {
-            total += ((double)items[i].value / items[i].weight) * capacity;
-            break;
+    key[0] = 0;
+    parent[0] = -1;
+
+    for (int count = 0; count < V - 1; count++) {
+        int u = minKey(key, mstSet);
+        mstSet[u] = true;
+
+        for (int v = 0; v < V; v++) {
+            if (graph[u][v] && !mstSet[v] && graph[u][v] < key[v]) {
+                parent[v] = u;
+                key[v] = graph[u][v];
+            }
         }
     }
-    return total;
+
+    int total = 0;
+    cout << "Edge Weight\n";
+    for (int i = 1; i < V; i++) {
+        cout << parent[i] << " - " << i << " " << graph[i][parent[i]] << endl;
+        total += graph[i][parent[i]];
+    }
+    cout << "Total weight: " << total;
 }
 
 int main() {
-    Item items[] = {{10,60}, {20,100}, {30,120}};
-    int n = 3, capacity = 50;
+    int graph[V][V] = {
+        {0,2,0,6,0},
+        {2,0,3,8,5},
+        {0,3,0,0,7},
+        {6,8,0,0,9},
+        {0,5,7,9,0}
+    };
 
-    cout << fixed << setprecision(2);
-    cout << "Max Value: " << fractional_knapsack(items, n, capacity);
-
+    prims_mst(graph);
     return 0;
 }
