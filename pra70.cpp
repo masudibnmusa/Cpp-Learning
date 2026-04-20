@@ -1,12 +1,12 @@
 #include <iostream>
 using namespace std;
 
-long long factorial(int n) {
+int count_digits(int n) {
     if (n == 0) return 1;
-    return n * factorial(n - 1);
+    return 1 + count_digits(n / 10);
 }
 
 int main() {
-    cout << factorial(5) << endl;
+    cout << count_digits(98765) << endl;
     return 0;
 }
