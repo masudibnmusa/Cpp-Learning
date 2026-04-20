@@ -1,62 +1,56 @@
 #include <iostream>
-#include <algorithm>
+#include <climits>
 using namespace std;
 
-struct Edge {
-    int u, v, w;
-};
+#define V 5
 
-bool cmp(Edge a, Edge b) {
-    return a.w < b.w;
+int minDist(int dist[], bool visited[]) {
+    int min = INT_MAX, idx;
+
+    for (int i = 0; i < V; i++)
+        if (!visited[i] && dist[i] < min)
+            min = dist[i], idx = i;
+
+    return idx;
 }
 
-int parent[100], rnk[100];
-
-int find(int x) {
-    if (parent[x] != x)
-        parent[x] = find(parent[x]);
-    return parent[x];
-}
-
-void unite(int a, int b) {
-    a = find(a);
-    b = find(b);
-
-    if (a != b) {
-        if (rnk[a] < rnk[b]) swap(a, b);
-        parent[b] = a;
-        if (rnk[a] == rnk[b]) rnk[a]++;
-    }
-}
-
-void kruskals_mst(Edge edges[], int E, int V) {
-    sort(edges, edges + E, cmp);
+void dijkstra(int graph[V][V], int src) {
+    int dist[V];
+    bool visited[V];
 
     for (int i = 0; i < V; i++) {
-        parent[i] = i;
-        rnk[i] = 0;
+        dist[i] = INT_MAX;
+        visited[i] = false;
     }
 
-    int total = 0;
-    cout << "Edge Weight\n";
+    dist[src] = 0;
 
-    for (int i = 0; i < E; i++) {
-        if (find(edges[i].u) != find(edges[i].v)) {
-            unite(edges[i].u, edges[i].v);
-            cout << edges[i].u << " - " << edges[i].v << " " << edges[i].w << endl;
-            total += edges[i].w;
+    for (int count = 0; count < V - 1; count++) {
+        int u = minDist(dist, visited);
+        visited[u] = true;
+
+        for (int v = 0; v < V; v++) {
+            if (!visited[v] && graph[u][v] &&
+                dist[u] + graph[u][v] < dist[v]) {
+                dist[v] = dist[u] + graph[u][v];
+            }
         }
     }
 
-    cout << "Total weight: " << total;
+    cout << "Vertex Distance\n";
+    for (int i = 0; i < V; i++)
+        cout << i << " " << dist[i] << endl;
 }
 
 int main() {
-    Edge edges[] = {
-        {0,1,2},{0,3,6},{1,2,3},{1,3,8},
-        {1,4,5},{2,4,7},{3,4,9}
+    int graph[V][V] = {
+        {0,4,0,0,8},
+        {4,0,8,0,11},
+        {0,8,0,7,0},
+        {0,0,7,0,9},
+        {8,11,0,9,0}
     };
 
-    kruskals_mst(edges, 7, 5);
+    dijkstra(graph, 0);
     return 0;
 }
